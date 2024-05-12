@@ -29,17 +29,37 @@ real_pattern_text1 = "Алгоритми – це послідовність т�
 real_pattern_text2 = "Було проведено дослідження різних структур даних" 
 random_pattern = "random_pattern"  # Вигаданий підрядок
 
+real_times_text1 = []
+random_times_text1 = []
+real_times_text2 = []
+random_times_text2 = []
+
 # Вимірюємо час виконання для кожного алгоритму та кожного типу підрядка
 algorithms = [boyer_moore_search, kmp_search, rabin_karp_search]
 for algorithm in algorithms:
-    real_time_text1 = measure_time(algorithm, text1, real_pattern_text1)
-    random_time_text1 = measure_time(algorithm, text1, random_pattern)
-    real_time_text2 = measure_time(algorithm, text2, real_pattern_text2)
-    random_time_text2 = measure_time(algorithm, text2, random_pattern)
+    real_times_text1.append(measure_time(algorithm, text1, real_pattern_text1))
+    random_times_text1.append(measure_time(algorithm, text1, random_pattern))
+    real_times_text2.append(measure_time(algorithm, text2, real_pattern_text2))
+    random_times_text2.append(measure_time(algorithm, text2, random_pattern))
 
-    print(f"Algorithm: {algorithm.__name__}")
-    print("Real pattern in text1:", real_time_text1)
-    print("Random pattern in text1:", random_time_text1)
-    print("Real pattern in text2:", real_time_text2)
-    print("Random pattern in text2:", random_time_text2)
-    print()
+#  Назви алгоритмів для легенди графіку
+algorithm_names = [algorithm.__name__ for algorithm in algorithms]
+
+# Побудова графіку
+plt.figure(figsize=(10, 6))
+
+plt.plot(algorithm_names, real_times_text1, label='Real pattern in text1', marker='o')
+plt.plot(algorithm_names, random_times_text1, label='Random pattern in text1', marker='o')
+plt.plot(algorithm_names, real_times_text2, label='Real pattern in text2', marker='o')
+plt.plot(algorithm_names, random_times_text2, label='Random pattern in text2', marker='o')
+
+plt.yscale('log')  # Встановлюємо логарифмічну шкалу по вертикалі
+
+plt.xlabel('Algorithm')
+plt.ylabel('Execution Time (log scale)')
+plt.title('Comparison of Substring Search Algorithms')
+plt.legend()
+plt.xticks(rotation=45)  # Обертаємо назви алгоритмів для кращої читабельності
+
+plt.tight_layout()
+plt.show()
